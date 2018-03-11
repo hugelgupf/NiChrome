@@ -128,12 +128,12 @@ func aptget() error {
 			missing = append(missing, packageName)
 		}
 	}
-	
+
 	if len(missing) == 0 {
 		fmt.Println("No missing dependencies to install")
 		return nil
 	}
-	
+
 	fmt.Printf("Using apt-get to get %v\n", missing)
 	get := []string{"apt-get", "-y", "install"}
 	get = append(get, missing...)
@@ -183,7 +183,7 @@ func goBuildStatic() error {
 
 func goBuildDynamic() error {
 	args := []string{"run", "u-root.go", "-o", filepath.Join(workingDir, initramfs)}
-	for _, v := range []string{"usr", "lib", "tcz", "etc", "upspin", ".ssh"} {
+	for _, v := range []string{"usr", "lib", "tcz", "etc", "upspin", ".ssh", "pxe"} {
 		if _, err := os.Stat(v); err != nil {
 			continue
 		}
@@ -270,7 +270,7 @@ func buildKernel() error {
 		fmt.Printf("copying %v to linux-stable/.config: %v", *config, err)
 	}
 
-	cmd := exec.Command("make", "--directory", "linux-stable", "-j" + strconv.Itoa(threads))
+	cmd := exec.Command("make", "--directory", "linux-stable", "-j"+strconv.Itoa(threads))
 	cmd.Stdin, cmd.Stdout, cmd.Stderr = os.Stdin, os.Stdout, os.Stderr
 	// TODO: this is OK for now. Later we'll need to do something
 	// with a map and GOARCH.
@@ -301,7 +301,7 @@ func buildVbutil() error {
 		fmt.Printf("couldn't checkout the right branch")
 		return err
 	}
-	cmd = exec.Command("make", "-j" + strconv.Itoa(threads))
+	cmd = exec.Command("make", "-j"+strconv.Itoa(threads))
 	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 	cmd.Dir = "vboot_reference"
 	if err := cmd.Run(); err != nil {

@@ -41,5 +41,8 @@ var (
 		"Xprogs",
 		"Xorg-7.7",
 		"wifi",
+		"dhcp",
+		"screen",
+		"vim",
 	}
 )
